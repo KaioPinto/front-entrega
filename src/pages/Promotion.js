@@ -33,7 +33,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/promotion.css'; // Importe o CSS
-
+import Grid from '@mui/material/Grid';
 
 const CustomLink = React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />);
 
@@ -48,11 +48,11 @@ const Promotion = () => {
     navigate('/login');
   }
 
-  const handleUpdatePrice = (productIndex) => {
+  const handleUpdatePrice = productIndex => {
     setEditingProductIndex(productIndex);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = {};
@@ -82,25 +82,25 @@ const Promotion = () => {
   };
 
   const AppBar = styled(MuiAppBar, {
-    shouldForwardProp: (prop) => prop !== 'open',
+    shouldForwardProp: prop => prop !== 'open'
   })(({ theme, open }) => ({
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
+      duration: theme.transitions.duration.leavingScreen
     }),
     ...(open && {
       marginLeft: drawerWidth,
       width: `calc(100% - ${drawerWidth}px)`,
       transition: theme.transitions.create(['width', 'margin'], {
         easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    }),
+        duration: theme.transitions.duration.enteringScreen
+      })
+    })
   }));
 
   const Drawer = styled(MuiDrawer, {
-    shouldForwardProp: (prop) => prop !== 'open',
+    shouldForwardProp: prop => prop !== 'open'
   })(({ theme, open }) => ({
     '& .MuiDrawer-paper': {
       position: 'relative',
@@ -108,32 +108,32 @@ const Promotion = () => {
       width: drawerWidth,
       transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
+        duration: theme.transitions.duration.enteringScreen
       }),
       boxSizing: 'border-box',
       ...(!open && {
         overflowX: 'hidden',
         transition: theme.transitions.create('width', {
           easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.leavingScreen,
+          duration: theme.transitions.duration.leavingScreen
         }),
         width: theme.spacing(7),
         [theme.breakpoints.up('sm')]: {
-          width: theme.spacing(9),
-        },
-      }),
-    },
+          width: theme.spacing(9)
+        }
+      })
+    }
   }));
 
   const customTheme = createTheme({
     palette: {
       primary: {
-        main: teal[500],
+        main: teal[500]
       },
       secondary: {
-        main: pink[500],
-      },
-    },
+        main: pink[500]
+      }
+    }
   });
 
   const toggleDrawer = () => {
@@ -165,7 +165,7 @@ const Promotion = () => {
               aria-label="open drawer"
               onClick={toggleDrawer}
               sx={{
-                marginRight: '36px',
+                marginRight: '36px'
               }}
             >
               {openDrawer ? <ChevronLeftIcon /> : <MenuIcon />}
@@ -184,7 +184,7 @@ const Promotion = () => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'flex-end',
-              px: [1],
+              px: [1]
             }}
           ></Toolbar>
           <Divider />
@@ -199,7 +199,11 @@ const Promotion = () => {
             </ListItemButton>
           </List>
           <List component="nav">
-            <ListItemButton component={CustomLink} to="/createProduct" className="create-product-link">
+            <ListItemButton
+              component={CustomLink}
+              to="/createProduct"
+              className="create-product-link"
+            >
               <ListItemIcon>
                 <Avatar sx={{ m: 0.1, bgcolor: 'secondary.main' }}>
                   <AddCircleOutlineIcon />
@@ -232,64 +236,72 @@ const Promotion = () => {
         <Box
           component="main"
           sx={{
-            backgroundColor: (theme) =>
+            backgroundColor: theme =>
               theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[900],
             flexGrow: 1,
             height: '100vh',
-            overflow: 'auto',
+            overflow: 'auto'
           }}
         >
           <Toolbar />
           <Container onSubmit={handleSubmit} component="form" maxWidth="lg" sx={{ mt: 10, mb: 10 }}>
-            {products.map((product, index) => (
-              <Card key={product.id} style={{ marginBottom: '25px' }}>
-                <CardContent>
-                  <Typography variant="h6" component="div">
-                    Informações do Produto:
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    Código: {product.cod}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    Tipo: {product.type}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    Item: {product.item}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    Quantidade: {product.amount}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    Valor: {product.value}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    <img src={product.urlImg} alt="Imagem do Produto" className="product-image" />
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  {editingProductIndex === index ? (
-                    <div>
-                      <TextField
-                        required
-                        InputLabelProps={{ shrink: true }}
-                        label="Novo Preço"
-                        fullWidth
-                        margin="normal"
-                        name="value"
-                      />
-                      <input type="hidden" name="id" value={product._id} />
-                      <Button variant="contained" type="submit" onSubmit={handleSubmit}>
-                        Salvar
-                      </Button>
-                    </div>
-                  ) : (
-                    <Button variant="contained" onClick={() => handleUpdatePrice(index)}>
-                      Alterar Preço
-                    </Button>
-                  )}
-                </CardActions>
-              </Card>
-            ))}
+            <Grid container spacing={2}>
+              {products.map((product, index) => (
+                <Grid item xs={12} sm={6} md={4} key={product.id}>
+                  <Card style={{ marginBottom: '25px', width: '300px' }}>
+                    <CardContent>
+                      <Typography variant="h6" component="div">
+                        Informações do Produto:
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        Código: {product.cod}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        Tipo: {product.type}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        Item: {product.item}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        Quantidade: {product.amount}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        Valor: {product.value}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        <img
+                          src={product.urlImg}
+                          alt="Imagem do Produto"
+                          style={{ width: '150px', height: '150px' }}
+                        />
+                      </Typography>
+                    </CardContent>
+                    <CardActions>
+                      {editingProductIndex === index ? (
+                        <div>
+                          <TextField
+                            required
+                            InputLabelProps={{ shrink: true }}
+                            label="Novo Preço"
+                            fullWidth
+                            margin="normal"
+                            name="value"
+                          />
+                          <input type="hidden" name="id" value={product._id} />
+                          <Button variant="contained" type="submit" onSubmit={handleSubmit}>
+                            Salvar
+                          </Button>
+                        </div>
+                      ) : (
+                        <Button variant="contained" onClick={() => handleUpdatePrice(index)}>
+                          Alterar Preço
+                        </Button>
+                      )}
+                    </CardActions>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
           </Container>
         </Box>
       </Box>

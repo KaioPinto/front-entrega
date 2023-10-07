@@ -10,21 +10,19 @@ import { Link, useNavigate } from 'react-router-dom';
 import httpService from '../services/httpService';
 import { toast } from 'react-toastify';
 import { ToastContainer } from 'react-toastify';
-import LiquorIcon from '@mui/icons-material/Liquor';
 import Paper from '@mui/material/Paper'; // Importe o componente Paper
 import '../styles/login.css'; // Importe o novo arquivo CSS
 import teal from '@mui/material/colors/teal';
 import 'react-toastify/dist/ReactToastify.css';
 import { useState } from 'react';
-
-
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const Login = () => {
   const [isClicked, setIsClicked] = useState(false);
-  const navigate = useNavigate();// Hook de roteamento para navegar entre páginas
+  const navigate = useNavigate(); // Hook de roteamento para navegar entre páginas
   // Função para lidar com o envio do formulário
   const handleSubmit = async e => {
-    if (!isClicked) setIsClicked(true)
+    if (!isClicked) setIsClicked(true);
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
@@ -35,21 +33,20 @@ const Login = () => {
 
     try {
       // Envia a solicitação para fazer login usando os dados do formulário
-     
+
       const response = await httpService.login(data);
       const result = await response.json();
       setTimeout(() => {
         if (result.message) {
-          setIsClicked(false)
+          setIsClicked(false);
         }
-      }, 8000)
+      }, 8000);
 
       if (result.message) {
         return toast(result.message);
       }
       // Armazena o nome do usuário e o token de acesso no armazenamento local
       localStorage.setItem('usuario', result['EmployeeData']);
-      console.log(localStorage.getItem('usuario'.cpf))
       localStorage.setItem('token', `Bearer ${result['Access-Token']}`);
       // Redireciona para a página de home após o login bem-sucedido
       navigate('/home');
@@ -61,7 +58,6 @@ const Login = () => {
 
   return (
     <>
-
       <Container component="main" maxWidth="xs">
         <Box
           sx={{
@@ -76,7 +72,7 @@ const Login = () => {
         >
           <Paper elevation={3} sx={{ margin: '15px', padding: '25px', borderRadius: 8 }}>
             <Avatar sx={{ bgcolor: teal[500] }}>
-              <LiquorIcon />
+              <AccountCircleIcon />
             </Avatar>
             <Typography variant="h5">Sign in</Typography>
 
